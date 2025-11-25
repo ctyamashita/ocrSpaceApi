@@ -1,0 +1,74 @@
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ocr-form {
+  min-width: 300px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+label[for="doc"]:has(img[src=""]) {
+  min-height: 300px;
+  position: relative;
+  cursor: pointer;
+}
+
+label[for="doc"]:has(img[src=""])::after {
+  position: absolute;
+  content: "Upload a file";
+  font-family: monospace;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+label[for="doc"] {
+  display: block;
+  background-color: white;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 0 24px 0 rgba(0,0,0,.3);
+}
+
+label[for="doc"] input {
+  display: none;
+}
+
+.img-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-container:has(p) img {
+  filter: grayscale(1) opacity(.2);
+}
+
+.img-container p {
+  margin: 0;
+  line-height: 1;
+  white-space: nowrap;
+  background-color: white;
+  border-radius: 4px;
+  align-content: center;
+  text-align: center;
+}
+
+.img-preview {
+  width: 100%;
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  height: 30vh;
+  resize: vertical;
+}
