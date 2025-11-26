@@ -7,10 +7,26 @@ body {
   justify-content: center;
 }
 
+h1 {
+  font-family: monospace;
+}
+
 .ocr-form {
   min-width: 300px;
-  max-width: 600px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
   margin: 0 auto;
+}
+
+.ocr-form:has(img[src=""]) {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 800px) {
+    .ocr-form {
+      grid-template-columns: 1fr;
+    }
 }
 
 label[for="doc"]:has(img[src=""]) {
@@ -30,8 +46,8 @@ label[for="doc"]:has(img[src=""])::after {
 
 label[for="doc"] {
   display: block;
+  width: 100%;
   background-color: white;
-  margin-bottom: 1rem;
   overflow: hidden;
   border-radius: 12px;
   box-shadow: 0 0 24px 0 rgba(0,0,0,.3);
@@ -49,10 +65,11 @@ label[for="doc"] input {
 }
 
 .img-container:has(p) img {
-  filter: grayscale(1) opacity(.2);
+  filter: grayscale(1) opacity(.5);
 }
 
 .img-container p {
+  position: absolute;
   margin: 0;
   line-height: 1;
   white-space: nowrap;
@@ -60,6 +77,7 @@ label[for="doc"] input {
   border-radius: 4px;
   align-content: center;
   text-align: center;
+  transition: .3s;
 }
 
 .img-preview {
@@ -67,8 +85,16 @@ label[for="doc"] input {
 }
 
 textarea {
+  --padding: 1rem;
   display: block;
-  width: 100%;
-  height: 30vh;
+  min-height: 30vh;
+  height: calc(100% - (var(--padding) * 2));
+  min-width: 40vw;
   resize: vertical;
+  padding: var(--padding);
+  border-radius: 12px;
+}
+
+textarea:empty {
+  display: none;
 }

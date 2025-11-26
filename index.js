@@ -24,9 +24,6 @@ const imageContainer = document.querySelector('.img-container')
 
 docInput.addEventListener("input", async (e) => {
   const image = e.target.files[0]
-  const imageExtension = image.type.split('/')[1]
-  console.log(image)
-
   const formData = new FormData()
   const base64 = await toBase64(image)
   formData.append('base64Image', base64)
@@ -46,25 +43,34 @@ docInput.addEventListener("input", async (e) => {
     body: formData
   }).then(response=>response.json())
   .then(data=>{
-    const ratio = imagePreview.height/ogHeight
-    console.log("Original Dimensions:", ogHeight, ogWidth)
-    console.log("Current Dimensions:", imagePreview.height, imagePreview.width)
-    console.log("Ratio", ratio)
+    // clearing old text
+    imageContainer.querySelectorAll('p').forEach(el=>el.remove())
+
+    const scale = imagePreview.height/ogHeight
+    // console.log("Original Dimensions:", ogHeight, ogWidth)
+    // console.log("Current Dimensions:", imagePreview.height, imagePreview.width)
+    // console.log("Scale", scale)
     resultContainer.innerHTML = data.ParsedResults[0].ParsedText
     data.ParsedResults[0].TextOverlay.Lines.forEach(line=>{
-      // per line
+      const firstWord = line.Words[0]
+      const lastWord = line.Words.slice(-1)[0]
+      // finding line width
+      const lastWordRight = lastWord.Left + lastWord.Width
+      const width = lastWordRight - firstWord.Left
+
       const lineEl = document.createElement('p')
       lineEl.innerText = line.LineText
-      lineEl.setAttribute('style', `position: absolute; top: ${line.Words[0].Top * ratio}px; left: ${line.Words[0].Left * ratio}px; height: ${line.Words[0].Height * ratio}px; width: ${((line.Words[line.Words.length - 1].Left + line.Words[line.Words.length - 1].Width) - line.Words[0].Left) * ratio}px; font-size: ${line.Words[0].Height * ratio * .7}px`)
+      lineEl.setAttribute('style', `top: ${(firstWord.Top/imagePreview.height) * scale * 100}%; left: ${(firstWord.Left/imagePreview.width) * scale * 100}%; height: ${(firstWord.Height/imagePreview.height) * scale * 100}%; width: ${(width/imagePreview.width) * scale * 100}%; font-size: ${firstWord.Height * scale * .7}px`)
       imageContainer.appendChild(lineEl)
-
-      // per word
-      // line.Words.forEach(word=>{
-      //   const wordEl = document.createElement('p')
-      //   wordEl.innerText = word.WordText
-      //   wordEl.setAttribute('style', `position: absolute; top: ${word.Top * ratio}px; left: ${word.Left * ratio}px; height: ${word.Height * ratio}px; width: ${word.Width * ratio}px; font-size: ${word.Height * ratio * .7}px`)
-      //   imageContainer.appendChild(wordEl)
-      // })
     })
+
+    window.onresize = () => {
+      const scale = imagePreview.height/ogHeight
+      console.log(scale)
+      const textEls = imageContainer.querySelectorAll('p')
+      textEls.forEach(el=>{
+        el.style.fontSize = `${el.offsetHeight * .7}px`
+      })
+    }
   })
 })
