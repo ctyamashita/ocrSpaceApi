@@ -41,7 +41,7 @@ docInput.addEventListener("input", async (e) => {
   fetch(endPoint,{
     method: 'POST',
     headers: {
-      "apikey": "3515c3cdf888957"
+      "apikey": "<YOUR_API_KEY>"
     },
     body: formData
   }).then(response=>response.json())
