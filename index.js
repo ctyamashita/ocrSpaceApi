@@ -34,6 +34,9 @@ docInput.addEventListener("input", async (e) => {
   // formData.append('isOverlayRequired', true)
   imagePreview.src = base64
   ogImage.src = base64
+  // clearing old text
+  imageContainer.querySelectorAll('p').forEach(el=>el.remove())
+  resultContainer.innerText = ''
   
   fetch(endPoint,{
     method: 'POST',
@@ -43,8 +46,6 @@ docInput.addEventListener("input", async (e) => {
     body: formData
   }).then(response=>response.json())
   .then(data=>{
-    // clearing old text
-    imageContainer.querySelectorAll('p').forEach(el=>el.remove())
 
     const scale = imagePreview.height/ogHeight
     // console.log("Original Dimensions:", ogHeight, ogWidth)
